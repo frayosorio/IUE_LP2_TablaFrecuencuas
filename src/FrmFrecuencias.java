@@ -2,16 +2,26 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.WindowConstants;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.JTextArea;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class FrmFrecuencias extends JFrame {
 
     JComboBox cmbRespuesta;
     JList lstRespuestas;
+    JTable tblFrecuencias;
     String[] opciones = new String[] { "Excelente", "Buena", "Regular", "Mala" };
+    String[] encabezados = new String[] { "Variable", "Frecuencia absoluta (f)", "Frecuencia acumulada (F)",
+            "Frecuencia relativa (fr)", "Frecuencia porcentual (%f)" };
+
+    String[] respuestas = new String[1000];
+    int totalRespuestas = -1;
 
     public FrmFrecuencias() {
         setSize(600, 500);
@@ -41,7 +51,7 @@ public class FrmFrecuencias extends JFrame {
         btnQuitar.setBounds(80, 120, 100, 25);
         getContentPane().add(btnQuitar);
 
-        lstRespuestas=new JList();
+        lstRespuestas = new JList();
         JScrollPane spRespuestas = new JScrollPane(lstRespuestas);
         spRespuestas.setBounds(270, 10, 100, 150);
         getContentPane().add(spRespuestas);
@@ -49,5 +59,51 @@ public class FrmFrecuencias extends JFrame {
         JButton btnCalcular = new JButton("Frecuencias");
         btnCalcular.setBounds(10, 200, 150, 25);
         getContentPane().add(btnCalcular);
+
+        tblFrecuencias = new JTable();
+        JScrollPane spFrecuencias = new JScrollPane(tblFrecuencias);
+        spFrecuencias.setBounds(10, 230, 550, 150);
+        getContentPane().add(spFrecuencias);
+
+        DefaultTableModel dtmFrecuencias = new DefaultTableModel(null, encabezados);
+        tblFrecuencias.setModel(dtmFrecuencias);
+
+        // Eventos
+        btnAgregar.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent ae) {
+                agregarDato();
+            }
+        });
+
+        btnQuitar.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent ae) {
+                quitarDato();
+            }
+        });
+
+    }
+
+    private void agregarDato() {
+        totalRespuestas++;
+        String respuesta = opciones[cmbRespuesta.getSelectedIndex()];
+        respuestas[totalRespuestas] = respuesta;
+        mostrarDatos();
+    }
+
+    private void quitarDato() {
+        int posicion = lstRespuestas.getSelectedIndex();
+        for (int i = posicion; i < totalRespuestas; i++) {
+            respuestas[i] = respuestas[i + 1];
+        }
+        totalRespuestas--;
+        mostrarDatos();
+    }
+
+    private void mostrarDatos() {
+        String[] respuestasActuales = new String[totalRespuestas + 1];
+        for (int i = 0; i <= totalRespuestas; i++) {
+            respuestasActuales[i] = respuestas[i];
+        }
+        lstRespuestas.setListData(respuestasActuales);
     }
 }
