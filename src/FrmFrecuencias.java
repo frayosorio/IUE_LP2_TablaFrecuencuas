@@ -10,6 +10,7 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import javax.swing.JOptionPane;
 
 public class FrmFrecuencias extends JFrame {
 
@@ -92,11 +93,15 @@ public class FrmFrecuencias extends JFrame {
 
     private void quitarDato() {
         int posicion = lstRespuestas.getSelectedIndex();
-        for (int i = posicion; i < totalRespuestas; i++) {
-            respuestas[i] = respuestas[i + 1];
+        if (posicion >= 0) {
+            for (int i = posicion; i < totalRespuestas; i++) {
+                respuestas[i] = respuestas[i + 1];
+            }
+            totalRespuestas--;
+            mostrarDatos();
+        } else {
+            JOptionPane.showMessageDialog(null, "Debe seleccionar una posición");
         }
-        totalRespuestas--;
-        mostrarDatos();
     }
 
     private void mostrarDatos() {
