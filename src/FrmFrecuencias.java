@@ -82,6 +82,12 @@ public class FrmFrecuencias extends JFrame {
             }
         });
 
+        btnCalcular.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent ae) {
+                calcularFrecuencias();
+            }
+        });
+
     }
 
     private void agregarDato() {
@@ -110,5 +116,30 @@ public class FrmFrecuencias extends JFrame {
             respuestasActuales[i] = respuestas[i];
         }
         lstRespuestas.setListData(respuestasActuales);
+    }
+
+    private void calcularFrecuencias() {
+        double[][] tabla = new double[opciones.length][encabezados.length - 1];
+        String[][] strTabla = new String[opciones.length][encabezados.length];
+
+        for (int i = 0; i <= totalRespuestas; i++) {
+            // buscar fila de la opcion de la respuesta
+            int posicion = -1;
+            for (int j = 0; j < opciones.length; j++) {
+                if (respuestas[i].equals(opciones[j])) {
+                    posicion = j;
+                    break;
+                }
+            }
+            tabla[posicion][0]++;
+        }
+
+        for (int i = 0; i < opciones.length; i++) {
+            strTabla[i][0] = opciones[i];
+            strTabla[i][1] = String.valueOf(tabla[i][0]);
+        }
+
+        DefaultTableModel dtmFrecuencias = new DefaultTableModel(strTabla, encabezados);
+        tblFrecuencias.setModel(dtmFrecuencias);
     }
 }
