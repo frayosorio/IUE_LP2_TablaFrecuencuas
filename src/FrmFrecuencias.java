@@ -135,8 +135,16 @@ public class FrmFrecuencias extends JFrame {
         }
 
         for (int i = 0; i < opciones.length; i++) {
+            //calculo de la frecuencia acumulada
+            tabla[i][1] = i == 0 ? tabla[i][0] : tabla[i - 1][1] + tabla[i][0];
+            tabla[i][2] = tabla[i][0] / (totalRespuestas+1);
+            tabla[i][3] = tabla[i][2] * 100;
+
+            //asignacion a la fuente de datos del JTable
             strTabla[i][0] = opciones[i];
-            strTabla[i][1] = String.valueOf(tabla[i][0]);
+            for (int j = 1; j <= 4; j++) {
+                strTabla[i][j] = String.valueOf(tabla[i][j - 1]) + (j==4? "%": "");
+            }
         }
 
         DefaultTableModel dtmFrecuencias = new DefaultTableModel(strTabla, encabezados);
